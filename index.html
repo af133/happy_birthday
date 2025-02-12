@@ -50,6 +50,36 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Overlay Awal untuk Mulai Musik */
+    #startOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 10000;
+      color: #fff;
+      text-align: center;
+    }
+    #startOverlay button {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      background: #ffdd57;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      transition: transform 0.3s ease;
+      margin-top: 1rem;
+    }
+    #startOverlay button:hover {
+      transform: scale(1.05);
+    }
     /* Tombol Toggle Mode (Bulan) */
     #toggleMode {
       position: absolute;
@@ -294,6 +324,11 @@
   </style>
 </head>
 <body>
+  <!-- Overlay Awal untuk Mulai Musik -->
+  <div id="startOverlay">
+    <div style="font-size: 2rem; margin-bottom: 1rem;">Tekan tombol untuk memulai musik</div>
+    <button id="startButton">Mulai</button>
+  </div>
   <!-- PRELOADER -->
   <div class="preloader">Coba lihat ini dulu... 👀</div>
   <!-- Flash -->
@@ -317,9 +352,17 @@
   </div>
   <!-- Container Interaksi -->
   <div id="interaction"></div>
-  <!-- Audio Background (tersembunyi) -->
-  <audio id="bgMusic" src="asset/Sal Priadi - I'd Like To Watch You Sleeping (Lirik Lagu) Kau adalah orang favoritku nomor 1.mp3" autoplay loop hidden></audio>
+  <!-- Audio Background (Musik otomatis, tersembunyi, mulai dalam keadaan mute) -->
+  <audio id="bgMusic" src="asset/Sal Priadi - I'd Like To Watch You Sleeping (Lirik Lagu) Kau adalah orang favoritku nomor 1.mp3" autoplay loop hidden muted></audio>
   <script>
+    // Mulai: tangani overlay awal
+    document.getElementById("startButton").addEventListener("click", function() {
+      // Unmute audio dan sembunyikan overlay
+      const bgMusic = document.getElementById("bgMusic");
+      bgMusic.muted = false;
+      document.getElementById("startOverlay").classList.add("hidden");
+    });
+    
     // Variabel global
     let index = 0;
     let mode = "light"; // Mode awal
@@ -664,7 +707,7 @@
       }, 1000);
     }
   </script>
-  <!-- Audio Background (Musik otomatis, tersembunyi) -->
-  <audio id="bgMusic" src="asset/Sal Priadi - I'd Like To Watch You Sleeping (Lirik Lagu) Kau adalah orang favoritku nomor 1.mp3" autoplay loop hidden></audio>
+  <!-- Audio Background (Musik otomatis, tersembunyi, mulai dalam keadaan mute) -->
+  <audio id="bgMusic" src="asset/Sal Priadi - I'd Like To Watch You Sleeping (Lirik Lagu) Kau adalah orang favoritku nomor 1.mp3" autoplay loop hidden muted></audio>
 </body>
 </html>
