@@ -81,16 +81,16 @@
     /* Container Pohon */
     .tree-container {
       width: 100%;
-      height: 100vh; /* Mengisi seluruh tinggi layar */
+      /* Tidak memaksa tinggi; container akan menyesuaikan dengan gambar */
       position: relative;
       overflow: hidden;
     }
-    /* Gambar Pohon – Menggunakan tag <img> agar responsif */
+    /* Gambar Pohon – Menggunakan tag <img> agar tidak diperbesar */
     .tree {
       display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover; /* Gambar mengisi container tanpa ruang kosong */
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
       transition: filter 1s;
       z-index: 1;
     }
@@ -556,7 +556,7 @@
     // Fungsi untuk menampilkan tombol "Sempet" dan "GAK SEMPET"
     function showWishButtons() {
       const container = document.createElement("div");
-      container.id = "wishButtons";
+      container.id = "finalButtons";
       container.style.textAlign = "center";
       container.style.marginTop = "20px";
       container.style.zIndex = "8";
@@ -596,30 +596,6 @@
         }
       }
       nextAdditionalMessage();
-    }
-    
-    // Fungsi untuk menampilkan tombol final "Mauuu" dan "Mau juga" setelah pesan tambahan selesai
-    function showFinalButtons() {
-      const container = document.createElement("div");
-      container.id = "finalButtons";
-      container.style.textAlign = "center";
-      container.style.marginTop = "20px";
-      container.style.zIndex = "8";
-      container.innerHTML = `<button id="btnMauuu">Mauuu</button> <button id="btnMauJuga">Mau juga</button>`;
-      document.getElementById("interaction").appendChild(container);
-    
-      document.getElementById("btnMauuu").addEventListener("click", function() {
-        container.remove();
-        // Tampilkan satu falling star segera
-        generateFallingStar();
-        displayFinalMessagesAndStartDramaticStars();
-      });
-      document.getElementById("btnMauJuga").addEventListener("click", function() {
-        container.remove();
-        // Tampilkan satu falling star segera
-        generateFallingStar();
-        displayFinalMessagesAndStartDramaticStars();
-      });
     }
     
     // Fungsi untuk menampilkan rangkaian pesan final dan memulai efek falling stars secara dramatis
