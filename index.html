@@ -8,7 +8,7 @@
     /* Style Utama */
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -17,8 +17,9 @@
       position: relative;
       overflow: hidden;
       flex-direction: column;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    /* Dark Mode yang Lebih Dramatis */
+    /* Dark Mode */
     .dark-mode {
       background: linear-gradient(135deg, #000428, #004e92);
     }
@@ -33,7 +34,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
+      font-size: 2rem;
       font-weight: bold;
       color: #003366;
       z-index: 9999;
@@ -43,7 +44,7 @@
       opacity: 0;
       pointer-events: none;
     }
-    /* Tombol Toggle Mode (sebagai tombol "bulan") */
+    /* Tombol Toggle Mode (Bulan) */
     #toggleMode {
       position: absolute;
       top: 20px;
@@ -63,43 +64,36 @@
       box-shadow: 0 0 15px rgba(255,255,255,0.6);
       border: 2px solid #F0F0F0;
     }
-    /* Kelas tambahan untuk efek glowing pada tombol (bulan) */
+    /* Efek glowing pada tombol */
     .glowing {
       animation: glowAnimation 1s infinite alternate;
     }
     @keyframes glowAnimation {
-      from {
-        filter: brightness(2) drop-shadow(0 0 10px #fff);
-      }
-      to {
-        filter: brightness(3) drop-shadow(0 0 20px #fff);
-      }
+      from { filter: brightness(2) drop-shadow(0 0 10px #fff); }
+      to { filter: brightness(3) drop-shadow(0 0 20px #fff); }
     }
-    /* Gambar Pohon */
+    /* Container Pohon */
     .tree-container {
-      width: 100vw;
+      width: 100%;
       max-width: 600px;
-      display: flex;
-      justify-content: center;
+      margin: 0 auto;
+      position: relative;
     }
     .tree {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
       width: 100%;
       height: auto;
       max-height: 80vh;
-      background: url("https://github.com/af133/happy_birthday/blob/main/asset/Andre%20Firmansyah%20(13).png") no-repeat center bottom;
+      /* Pastikan URL gambar merujuk ke file raw */
+      ckground: url("https://github.com/af133/happy_birthday/blob/main/asset/Andre%20Firmansyah%20(13).png") no-repeat center bottom;
       background-size: contain;
       transition: filter 1s;
       z-index: 1;
     }
-    /* Pada dark mode, pohon tampil normal (tanpa filter tambahan) */
+    /* Di dark mode, pohon tampil normal (tanpa filter) */
     .dark-mode .tree {
       filter: none;
     }
-    /* Kelas untuk efek sementara pada pohon setelah fireworks muncul (akan diterapkan saat triggerEffects dipanggil) */
+    /* Kelas untuk efek glowing pada pohon (ditambahkan saat fireworks muncul) */
     .glowing-tree {
       animation: treeGlow 2s infinite alternate;
     }
@@ -115,25 +109,24 @@
     .message-container {
       position: absolute;
       top: 10%;
+      width: 80%;
+      margin: 0 auto;
       text-align: center;
-      font-size: 24px;
+      font-size: 1.5rem;
       font-weight: bold;
       color: #003366;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
       opacity: 0;
       transition: opacity 1s ease-in-out;
       z-index: 2;
-      width: 80%;
-      margin: 0 auto;
     }
     .dark-mode .message-container {
       color: #F0F0F0;
     }
-    /* Tampilan Khusus untuk Happy Birthday */
     .happy-birthday {
       display: inline-block;
       animation: popIn 1s ease-out;
-      font-size: 32px;
+      font-size: 2rem;
       color: #ffcc00;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -250,7 +243,7 @@
       border: 2px solid #ff9900;
       border-radius: 12px;
       padding: 12px 24px;
-      font-size: 20px;
+      font-size: 1.25rem;
       color: #003366;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -264,24 +257,38 @@
       box-shadow: 0 6px 12px rgba(0,0,0,0.2);
       background: linear-gradient(45deg, #ffcc00, #ff7700);
     }
-    /* Responsif */
-    @media (max-width: 600px) {
+    /* Media Queries Responsif */
+    @media (max-width: 768px) {
       .message-container {
-        font-size: 18px;
+        font-size: 1.25rem;
         width: 90%;
-        top: 8%;
-      }
-      .preloader {
-        font-size: 18px;
-      }
-      .tree-container {
-        max-width: 90%;
       }
       #toggleMode {
         width: 50px;
         height: 50px;
+        top: 15px;
+        left: 15px;
+      }
+      #interaction button {
+        font-size: 1rem;
+        padding: 10px 20px;
+      }
+    }
+    @media (max-width: 480px) {
+      .message-container {
+        font-size: 1rem;
+        width: 95%;
+        top: 8%;
+      }
+      #toggleMode {
+        width: 40px;
+        height: 40px;
         top: 10px;
         left: 10px;
+      }
+      #interaction button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
       }
     }
   </style>
@@ -430,7 +437,6 @@
       if (mode === "dark") {
         generateStars();
         document.getElementById("aurora").style.opacity = 1;
-        // Tambahkan kelas glowing pada tombol toggle (bulan)
         const toggleButton = document.getElementById("toggleMode");
         toggleButton.classList.add("glowing");
         // Tambahkan kelas glowing-tree agar pohon mulai bersinar dan tetap bersinar
@@ -492,7 +498,7 @@
       }
     }
     
-    // Fungsi untuk membuat 1 falling star (bintang jatuh) dengan posisi random
+    // Fungsi untuk membuat 1 falling star (bintang jatuh) dengan posisi acak
     function generateFallingStar() {
       const fallingStar = document.createElement("div");
       fallingStar.className = "shooting-star";
@@ -546,53 +552,8 @@
       nextExtraMessage();
     }
     
-    // Tampilkan tombol "Sempet" dan "GAK SEMPET"
-    function showWishButtons() {
-      const container = document.createElement("div");
-      container.id = "wishButtons";
-      container.style.textAlign = "center";
-      container.style.marginTop = "20px";
-      container.style.zIndex = "2";
-      container.innerHTML = `<button id="btnSempet">Sempet</button> <button id="btnGakSempet">GAK SEMPET</button>`;
-      document.getElementById("interaction").appendChild(container);
-    
-      document.getElementById("btnSempet").addEventListener("click", function() {
-        container.remove();
-        messageElement.innerText = "Sip, enjoy your wish!";
-      });
-    
-      document.getElementById("btnGakSempet").addEventListener("click", function() {
-        container.remove();
-        displayAdditionalMessages();
-      });
-    }
-    
-    // Tampilkan pesan tambahan setelah tombol "GAK SEMPET" ditekan
-    function displayAdditionalMessages() {
-      let additionalIndex = 0;
-      const additionalMessages = [
-        "Sapa siuruh lamaaaa...",
-        "kecepeten ya? wwkwkw",
-        "Mau aku kasih bintang jatuh lagi gak??"
-      ];
-      function nextAdditionalMessage() {
-        if (additionalIndex < additionalMessages.length) {
-          messageElement.style.opacity = 0;
-          setTimeout(() => {
-            messageElement.innerText = additionalMessages[additionalIndex];
-            messageElement.style.opacity = 1;
-            additionalIndex++;
-            setTimeout(nextAdditionalMessage, 4000);
-          }, 1000);
-        } else {
-          showFinalButtons();
-        }
-      }
-      nextAdditionalMessage();
-    }
-    
     // Tampilkan tombol "Mauuu" dan "Mau juga" setelah pesan tambahan selesai
-    function showFinalButtons() {
+    function showWishButtons() {
       const container = document.createElement("div");
       container.id = "finalButtons";
       container.style.textAlign = "center";
