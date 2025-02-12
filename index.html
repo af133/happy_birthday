@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pohon Romantis dengan Dark Mode</title>
+  <style>
+    /* Style Utama */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(to top, #a8e6ff, #ffffff);
+      transition: background 1s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    /* Dark Mode yang Lebih Dramatis */
+    .dark-mode {
+      background: linear-gradient(135deg, #000428, #004e92);
+    }
+    /* PRELOADER */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #003366;
+      z-index: 9999;
+      transition: opacity 1s ease-out;
+    }
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Tombol Toggle Mode (sebagai tombol "bulan") */
+    #toggleMode {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle, #ffdd57 50%, #ff9900 90%);
+      cursor: pointer;
+      transition: all 0.5s;
+      z-index: 2;
+      box-shadow: 0 0 20px rgba(255,215,0,0.8);
+    }
+    .dark-mode #toggleMode {
+      background: radial-gradient(circle, #bbb 40%, #888 80%);
+      box-shadow: 0 0 15px rgba(255,255,255,0.6);
+      border: 2px solid #F0F0F0;
+    }
+    /* Kelas tambahan untuk efek glowing pada tombol (bulan) */
+    .glowing {
+      animation: glowAnimation 1s infinite alternate;
+    }
+    @keyframes glowAnimation {
+      from {
+        filter: brightness(2) drop-shadow(0 0 10px #fff);
+      }
+      to {
+        filter: brightness(3) drop-shadow(0 0 20px #fff);
+      }
+    }
+    /* Gambar Pohon */
+    .tree-container {
+      width: 100vw;
+      max-width: 600px;
+      display: flex;
+      justify-content: center;
+    }
+    .tree {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: auto;
+      max-height: 80vh;
+      background: url("asset/Andre%20Firmansyah%20(12).png") no-repeat center bottom;
+      background-size: contain;
+      transition: filter 1s;
+      z-index: 1;
+    }
+    /* Pada dark mode, pohon tampil tanpa filter tambahan (normal) */
+    .dark-mode .tree {
+      filter: none;
+    }
+    /* Kelas untuk efek sementara pada pohon saat fireworks muncul */
+    .temp-tree-effect {
+      filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
+    }
+    /* Pesan */
+    .message-container {
+      position: absolute;
+      top: 10%;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      color: #003366;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: 2;
+      width: 80%;
+      margin: 0 auto;
+    }
+    .dark-mode .message-container {
+      color: #F0F0F0;
+    }
+    /* Tampilan Khusus untuk Happy Birthday */
+    .happy-birthday {
+      display: inline-block;
+      animation: popIn 1s ease-out;
+      font-size: 32px;
+      color: #ffcc00;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    /* Aurora */
+    #aurora {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 40%;
+      background: linear-gradient(180deg, transparent, rgba(0,50,100,0.5));
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .dark-mode #aurora {
+      opacity: 1;
+    }
+    /* Flash */
+    #flash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: white;
+      z-index: 4;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .flash-active {
+      animation: flashAnim 0.5s ease-out forwards;
+    }
+    @keyframes flashAnim {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    /* Kembang Api */
+    #fireworks {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 3;
+    }
+    .firework {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: explode 1s ease-out forwards;
+    }
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(5); opacity: 0; }
+    }
+    /* Bintang */
+    #stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+      background: transparent;
+    }
+    .star {
+      position: absolute;
+      background: radial-gradient(circle, #fff 40%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 4s infinite ease-in-out;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.2; transform: scale(0.8); }
+    }
+    /* Falling Star */
+    .shooting-star {
+      position: absolute;
+      width: 4px;
+      height: 120px;
+      background: linear-gradient(45deg, white, rgba(255,255,255,0));
+      opacity: 0.8;
+      transform: rotate(45deg);
+      animation: shootingStar 2s linear forwards;
+      z-index: -1;
+    }
+    @keyframes shootingStar {
+      0% { opacity: 0; transform: translate(0, 0) rotate(45deg); }
+      10% { opacity: 1; }
+      100% { opacity: 0; transform: translate(-500px, 500px) rotate(45deg); }
+    }
+    /* Container Interaksi */
+    #interaction {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      z-index: 2;
+    }
+    /* Tombol Interaktif */
+    #interaction button {
+      background: linear-gradient(45deg, #ffdd57, #ff9900);
+      border: 2px solid #ff9900;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 20px;
+      color: #003366;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 8px;
+      z-index: 2;
+      position: relative;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #interaction button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      background: linear-gradient(45deg, #ffcc00, #ff7700);
+    }
+    /* Responsif */
+    @media (max-width: 600px) {
+      .message-container {
+        font-size: 18px;
+        width: 90%;
+        top: 8%;
+      }
+      .preloader {
+        font-size: 18px;
+      }
+      .tree-container {
+        max-width: 90%;
+      }
+      #toggleMode {
+        width: 50px;
+        height: 50px;
+        top: 10px;
+        left: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- PRELOADER -->
+  <div class="preloader">Coba lihat ini dulu... 👀</div>
+  <!-- Flash -->
+  <div id="flash"></div>
+  <!-- Kembang Api -->
+  <div id="fireworks"></div>
+  <!-- Bintang -->
+  <div id="stars"></div>
+  <!-- Aurora -->
+  <div id="aurora"></div>
+  <!-- Tombol Toggle Mode (Bulan) -->
+  <button id="toggleMode"></button>
+  <!-- Pesan -->
+  <div class="message-container" id="message">
+    Lihat pohon cinta ini... Tekan mataharinya untuk keajaiban! 🌞✨
+  </div>
+  <!-- Container Pohon -->
+  <div class="tree-container">
+    <img src="C:/Projek Pribadi/Website/Portofolio_Andre%20Firmansyah/asset/Andre%20Firmansyah%20(12).png" class="tree" alt="Pohon Romantis" />
+  </div>
+  <!-- Container Interaksi -->
+  <div id="interaction"></div>
+  <script>
+    // Variabel global
+    let index = 0;
+    let mode = "light"; // Mode awal
+    const messageElement = document.getElementById("message");
+    let messageInterval = null;
+    
+    // Pesan untuk masing-masing mode
+    const messages = {
+      light: [
+        "Pohonnya cantik ya! 🌳😊",
+        "Colorfull... penuh warna! 🎨🌈",
+        "Daunnya warna warni yaa! 🍃✨",
+        "Pohonnya ini ceritanya pernah aku liat di mimpi aku! 😴🌟",
+        "Emang gak mirip 100% sih, tapi gambarannya gitu! 🤔👌",
+        "Abstrak tapi cantik, jadi aku mau nunjukinnya ke kamu! 💖🎇",
+        "Coba deh, luangin waktu kamu bentar buat ngeliatin ini! ⏳😉",
+        "Suka gak? 😍",
+        "Sebenernya ketika malam akan lebih keliatan bagus banget! 🌙✨",
+        "Jadi tunggu hingga malam ya! 🌌",
+        "HAHAHA gak kok, bercandaa... kita langsung sulapin jadi malam aja ya! 😂🌠",
+        "Sini aku mau kasih kamu kekuatan buat muterin langit kayak Moon Knight! 🦇🌃",
+        "Coba klik mataharinya deh, I guarantee you'll be amazed! 🌞🤩"
+      ],
+      dark: [
+        "Gimana cantik gak? 🤩",
+        "Pohon akan bersinar kalau malam hari! 🌙✨",
+        "Tapi keliatannya masih biasa aja ya! 😐",
+        "Langitnya juga sep bet! 🌌👌",
+        "Aku inget dulu kita sering bahas Unreal wkwkwk! 🎮😄",
+        "Jadi... let me show you how magical this would be! ✨😎",
+        "U ready? 😏🔥"
+      ]
+    };
+    
+    // Pesan tambahan (extra messages)
+    const extraMessages = [
+      "Happy Birthday untukmu! 🎂🎉",
+      "sorry aku salah waktu ngucapin kemarin! 🙏",
+      "maaf juga kalau gak bagus ya karenan ini sks hahaha! 😅",
+      "ini aku kasih bintangnya 500 bintang aja ya... 🌟",
+      "dan untuk wish nya, buat aja sendiri, wleee",
+      "tuh aku kasih bintang jatuh satu",
+      "udah sempat wish belom?"
+    ];
+    
+    // Fungsi untuk menampilkan pesan utama satu per satu
+    function showMessages() {
+      if (index < messages[mode].length) {
+        messageElement.style.opacity = 0;
+        setTimeout(() => {
+          const currentMessage = messages[mode][index];
+          messageElement.innerText = currentMessage;
+          messageElement.style.opacity = 1;
+          if (currentMessage === "U ready? 😏🔥") {
+            clearInterval(messageInterval);
+            setTimeout(countdown, 4000);
+          }
+          index++;
+        }, 1000);
+      } else {
+        clearInterval(messageInterval);
+      }
+    }
+    
+    // Mulai interval pesan tiap 4 detik
+    messageInterval = setInterval(showMessages, 4000);
+    showMessages();
+    
+    // Sembunyikan preloader setelah 3 detik
+    setTimeout(() => {
+      document.querySelector(".preloader").classList.add("hidden");
+    }, 3000);
+    
+    // Toggle mode (light/dark)
+    document.getElementById("toggleMode").addEventListener("click", function () {
+      document.body.classList.toggle("dark-mode");
+      mode = document.body.classList.contains("dark-mode") ? "dark" : "light";
+      if (mode === "light") {
+        document.getElementById("stars").innerHTML = "";
+        document.getElementById("aurora").style.opacity = 0;
+        document.getElementById("interaction").innerHTML = "";
+        document.getElementById("toggleMode").classList.remove("glowing");
+        const treeElement = document.querySelector(".tree");
+        treeElement.classList.remove("temp-tree-effect");
+      }
+      index = 0;
+      clearInterval(messageInterval);
+      messageInterval = setInterval(showMessages, 4000);
+      showMessages();
+    });
+    
+    // Countdown: tampilkan angka 3, 2, dan langsung hilang saat mencapai 1 untuk trigger efek
+    function countdown() {
+      let count = 3;
+      messageElement.style.opacity = 0;
+      const countdownInterval = setInterval(() => {
+        if (count > 1) {
+          messageElement.innerText = count;
+          messageElement.style.opacity = 1;
+          count--;
+        } else {
+          messageElement.innerText = "";
+          messageElement.style.opacity = 0;
+          clearInterval(countdownInterval);
+          triggerEffects();
+        }
+      }, 1000);
+    }
+    
+    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek pada pohon setelah fireworks muncul (pada dark mode)
+    function triggerEffects() {
+      const flash = document.getElementById("flash");
+      flash.classList.add("flash-active");
+      setTimeout(() => {
+        flash.classList.remove("flash-active");
+      }, 500);
+      
+      if (mode === "dark") {
+        generateStars();
+        document.getElementById("aurora").style.opacity = 1;
+        // Tambahkan kelas glowing pada tombol toggle (bulan)
+        const toggleButton = document.getElementById("toggleMode");
+        toggleButton.classList.add("glowing");
+        // Setelah fireworks muncul, tambahkan efek filter pada pohon secara sementara
+        const treeElement = document.querySelector(".tree");
+        treeElement.classList.add("temp-tree-effect");
+        // Hapus efek tersebut setelah 3000ms agar pohon kembali tampil normal
+        setTimeout(() => {
+          treeElement.classList.remove("temp-tree-effect");
+        }, 3000);
+      }
+      
+      const fireworksContainer = document.getElementById("fireworks");
+      fireworksContainer.innerHTML = "";
+      for (let i = 0; i < 10; i++) {
+        const firework = document.createElement("div");
+        firework.className = "firework";
+        firework.style.left = Math.random() * 100 + "vw";
+        firework.style.top = Math.random() * 50 + "vh";
+        firework.style.backgroundColor = "hsl(" + Math.random() * 360 + ", 100%, 50%)";
+        fireworksContainer.appendChild(firework);
+      }
+      
+      setTimeout(() => {
+        fireworksContainer.innerHTML = "";
+        if (mode === "dark") {
+          displayExtraMessages();
+        }
+      }, 3000);
+    }
+    
+    // Tambahkan CSS untuk kelas "temp-tree-effect" (efek sementara pada pohon saat fireworks muncul)
+    const styleEl = document.createElement('style');
+    styleEl.innerHTML = `
+      .temp-tree-effect {
+        filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
+      }
+    `;
+    document.head.appendChild(styleEl);
+    
+    // Fungsi untuk membuat bintang di latar belakang (posisi paling bawah)
+    function generateStars() {
+      const starsContainer = document.getElementById("stars");
+      starsContainer.innerHTML = "";
+      for (let i = 0; i < 500; i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        let size = Math.random() * 2 + 1;
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        star.style.left = Math.random() * 100 + "vw";
+        star.style.top = Math.random() * 100 + "vh";
+        star.style.animationDelay = Math.random() * 4 + "s";
+        star.style.opacity = Math.random() * 0.5 + 0.5;
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    // Fungsi untuk membuat 1 falling star (bintang jatuh) yang lebih besar dan dengan posisi random
+    function generateFallingStar() {
+      const fallingStar = document.createElement("div");
+      fallingStar.className = "shooting-star";
+      // Tentukan posisi horizontal dan vertikal secara acak agar efek falling star lebih dinamis
+      fallingStar.style.left = Math.random() * 100 + "vw";
+      fallingStar.style.top = Math.random() * 100 + "vh";
+      document.getElementById("stars").appendChild(fallingStar);
+      setTimeout(() => {
+        fallingStar.remove();
+      }, 2000);
+    }
+    
+    // Fungsi untuk menampilkan pesan tambahan secara berurutan (dengan interaksi)
+    function displayExtraMessages() {
+      let extraIndex = 0;
+      function nextExtraMessage() {
+        if (extraIndex < extraMessages.length) {
+          if (extraIndex === 5) {  // Pesan "tuh aku kasih bintang jatuh satu"
+            messageElement.style.opacity = 0;
+            setTimeout(() => {
+              messageElement.innerText = extraMessages[extraIndex];
+              messageElement.style.opacity = 1;
+              // Tampilkan satu falling star saja
+              generateFallingStar();
+              extraIndex++;
+              setTimeout(nextExtraMessage, 4000);
+            }, 1000);
+          } else if (extraIndex === 6) {  // Pesan "udah sempat wish belom?"
+            messageElement.style.opacity = 0;
+            setTimeout(() => {
+              messageElement.innerText = extraMessages[extraIndex];
+              messageElement.style.opacity = 1;
+              extraIndex++;
+              // Tampilkan tombol interaktif untuk "Sempet" / "GAK SEMPET"
+              showWishButtons();
+            }, 1000);
+          } else {
+            messageElement.style.opacity = 0;
+            setTimeout(() => {
+              if (extraIndex === 0) {
+                messageElement.innerHTML = `<span class="happy-birthday">${extraMessages[extraIndex]}</span>`;
+              } else {
+                messageElement.innerText = extraMessages[extraIndex];
+              }
+              messageElement.style.opacity = 1;
+              extraIndex++;
+              setTimeout(nextExtraMessage, 4000);
+            }, 1000);
+          }
+        }
+      }
+      nextExtraMessage();
+    }
+    
+    // Tampilkan tombol "Sempet" dan "GAK SEMPET"
+    function showWishButtons() {
+      const container = document.createElement("div");
+      container.id = "wishButtons";
+      container.style.textAlign = "center";
+      container.style.marginTop = "20px";
+      container.style.zIndex = "2";
+      container.innerHTML = `<button id="btnSempet">Sempet</button> <button id="btnGakSempet">GAK SEMPET</button>`;
+      document.getElementById("interaction").appendChild(container);
+    
+      document.getElementById("btnSempet").addEventListener("click", function() {
+        container.remove();
+        messageElement.innerText = "Sip, enjoy your wish!";
+      });
+    
+      document.getElementById("btnGakSempet").addEventListener("click", function() {
+        container.remove();
+        displayAdditionalMessages();
+      });
+    }
+    
+    // Tampilkan pesan tambahan setelah tombol "GAK SEMPET" ditekan
+    function displayAdditionalMessages() {
+      let additionalIndex = 0;
+      const additionalMessages = [
+        "Sapa siuruh lamaaaa...",
+        "kecepeten ya? wwkwkw",
+        "Mau aku kasih bintang jatuh lagi gak??"
+      ];
+      function nextAdditionalMessage() {
+        if (additionalIndex < additionalMessages.length) {
+          messageElement.style.opacity = 0;
+          setTimeout(() => {
+            messageElement.innerText = additionalMessages[additionalIndex];
+            messageElement.style.opacity = 1;
+            additionalIndex++;
+            setTimeout(nextAdditionalMessage, 4000);
+          }, 1000);
+        } else {
+          showFinalButtons();
+        }
+      }
+      nextAdditionalMessage();
+    }
+    
+    // Tampilkan tombol "Mauuu" dan "Mau juga" setelah pesan tambahan selesai
+    function showFinalButtons() {
+      const container = document.createElement("div");
+      container.id = "finalButtons";
+      container.style.textAlign = "center";
+      container.style.marginTop = "20px";
+      container.style.zIndex = "2";
+      container.innerHTML = `<button id="btnMauuu">Mauuu</button> <button id="btnMauJuga">Mau juga</button>`;
+      document.getElementById("interaction").appendChild(container);
+    
+      document.getElementById("btnMauuu").addEventListener("click", function() {
+        container.remove();
+        displayFinalMessagesAndStartDramaticStars();
+      });
+      document.getElementById("btnMauJuga").addEventListener("click", function() {
+        container.remove();
+        displayFinalMessagesAndStartDramaticStars();
+      });
+    }
+    
+    // Tampilkan rangkaian pesan final dan mulai falling stars secara dramatis
+    function displayFinalMessagesAndStartDramaticStars() {
+      const finalMessages = [
+        "Okee aku kasih deh bintang banyakk",
+        "Biar gak dikatain pelit HAHAHA",
+        "+1 lagi",
+        "aku mau bilang",
+        "today is the oldest you have been, and become the bravest version of you so far",
+        "and i am glad i could take part ur story part or even chapters",
+        "and with these 500 stars..",
+        "i wish you",
+        "and here are the firelies"
+      ];
+      let finalIndex = 0;
+      function showNextFinalMessage() {
+        if (finalIndex < finalMessages.length) {
+          messageElement.style.opacity = 0;
+          setTimeout(() => {
+            messageElement.innerText = finalMessages[finalIndex];
+            messageElement.style.opacity = 1;
+            finalIndex++;
+            setTimeout(showNextFinalMessage, 4000);
+          }, 1000);
+        } else {
+          messageElement.innerText = "Enjoy the falling stars!";
+          startDramaticFallingStars();
+        }
+      }
+      showNextFinalMessage();
+    }
+    
+    // Fungsi untuk mulai menghasilkan falling stars secara dramatis (5 falling stars sekaligus, posisi acak)
+    function startDramaticFallingStars() {
+      setInterval(() => {
+        for (let i = 0; i < 5; i++) {
+          generateFallingStar();
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
