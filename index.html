@@ -81,16 +81,16 @@
     /* Container Pohon */
     .tree-container {
       width: 100%;
-      /* Tidak memaksa tinggi; container akan menyesuaikan dengan gambar */
+      height: 100vh; /* Mengisi seluruh tinggi viewport */
       position: relative;
       overflow: hidden;
     }
-    /* Gambar Pohon – Menggunakan tag <img> agar tidak diperbesar */
+    /* Gambar Pohon – menggunakan tag <img> */
     .tree {
       display: block;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Mengisi container tanpa ruang kosong */
       transition: filter 1s;
       z-index: 1;
     }
@@ -109,7 +109,8 @@
       width: 80%;
       margin: 0 auto;
       text-align: center;
-      font-size: clamp(2rem, 4vw, 3rem); /* Teks lebih besar */
+      /* Menggunakan clamp() untuk fluid typography */
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       font-weight: bold;
       color: #003366;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
@@ -124,7 +125,7 @@
     .happy-birthday {
       display: inline-block;
       animation: popIn 1s ease-out;
-      font-size: clamp(2.5rem, 4vw, 3.5rem); /* Teks lebih besar */
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       color: #ffcc00;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -177,7 +178,6 @@
       overflow: visible;
       z-index: 4;
     }
-    
     .firework {
       position: absolute;
       width: 8px;
@@ -236,7 +236,7 @@
       transform: translate(-50%, -50%);
       width: 100%;
       text-align: center;
-      z-index: 7;
+      z-index: 6; /* Pastikan tombol tampil di atas pohon */
     }
     /* Tombol Interaktif */
     #interaction button {
@@ -249,7 +249,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       margin: 8px;
-      z-index: 8;
+      z-index: 7;
       position: relative;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
@@ -261,7 +261,7 @@
     /* Media Queries Responsif */
     @media (max-width: 768px) {
       .message-container {
-        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-size: clamp(1rem, 3vw, 1.75rem);
         width: 90%;
       }
       #toggleMode {
@@ -277,7 +277,7 @@
     }
     @media (max-width: 480px) {
       .message-container {
-        font-size: clamp(1.25rem, 4vw, 1.75rem);
+        font-size: clamp(0.9rem, 4vw, 1.25rem);
         width: 95%;
         top: 8%;
       }
@@ -533,7 +533,7 @@
               messageElement.innerText = extraMessages[extraIndex];
               messageElement.style.opacity = 1;
               extraIndex++;
-              // Tampilkan tombol "Sempet" dan "GAK SEMPET"
+              // Tampilkan tombol interaktif
               showWishButtons();
             }, 1000);
           } else {
@@ -554,52 +554,31 @@
       nextExtraMessage();
     }
     
-    // Fungsi untuk menampilkan tombol "Sempet" dan "GAK SEMPET"
+    // Tampilkan tombol "Mauuu" dan "Mau juga" setelah pesan tambahan selesai
     function showWishButtons() {
       const container = document.createElement("div");
       container.id = "finalButtons";
       container.style.textAlign = "center";
       container.style.marginTop = "20px";
-      container.style.zIndex = "8";
-      container.innerHTML = `<button id="btnSempet">Sempet</button> <button id="btnGakSempet">GAK SEMPET</button>`;
+      container.style.zIndex = "7";
+      container.innerHTML = `<button id="btnMauuu">Mauuu</button> <button id="btnMauJuga">Mau juga</button>`;
       document.getElementById("interaction").appendChild(container);
     
-      document.getElementById("btnSempet").addEventListener("click", function() {
+      document.getElementById("btnMauuu").addEventListener("click", function() {
         container.remove();
-        messageElement.innerText = "Sip, enjoy your wish!";
+        // Tampilkan satu falling star segera
+        generateFallingStar();
+        displayFinalMessagesAndStartDramaticStars();
       });
-    
-      document.getElementById("btnGakSempet").addEventListener("click", function() {
+      document.getElementById("btnMauJuga").addEventListener("click", function() {
         container.remove();
-        displayAdditionalMessages();
+        // Tampilkan satu falling star segera
+        generateFallingStar();
+        displayFinalMessagesAndStartDramaticStars();
       });
     }
     
-    // Fungsi untuk menampilkan pesan tambahan setelah tombol "GAK SEMPET" ditekan
-    function displayAdditionalMessages() {
-      let additionalIndex = 0;
-      const additionalMessages = [
-        "Sapa siuruh lamaaaa...",
-        "kecepeten ya? wwkwkw",
-        "Mau aku kasih bintang jatuh lagi gak??"
-      ];
-      function nextAdditionalMessage() {
-        if (additionalIndex < additionalMessages.length) {
-          messageElement.style.opacity = 0;
-          setTimeout(() => {
-            messageElement.innerText = additionalMessages[additionalIndex];
-            messageElement.style.opacity = 1;
-            additionalIndex++;
-            setTimeout(nextAdditionalMessage, 4000);
-          }, 1000);
-        } else {
-          showFinalButtons();
-        }
-      }
-      nextAdditionalMessage();
-    }
-    
-    // Fungsi untuk menampilkan rangkaian pesan final dan memulai efek falling stars secara dramatis
+    // Tampilkan rangkaian pesan final dan mulai efek falling stars secara dramatis
     function displayFinalMessagesAndStartDramaticStars() {
       const finalMessages = [
         "Okee aku kasih deh bintang banyakk",
