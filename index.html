@@ -75,17 +75,18 @@
     /* Container Pohon */
     .tree-container {
       width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
+      height: 100vh;
       position: relative;
+      overflow: hidden;
     }
+    /* Gunakan tag <img> untuk pohon dengan src lokal */
     .tree {
       width: 100%;
-      height: auto;
-      max-height: 80vh;
-      /* Pastikan URL gambar merujuk ke file raw */
-      ckground: url("https://github.com/af133/happy_birthday/blob/main/asset/Andre%20Firmansyah%20(13).png") no-repeat center bottom;
-      background-size: contain;
+      height: 100%;
+      /* Menggunakan URL background sesuai permintaan.
+         Jika gambar tidak muncul, pertimbangkan untuk menggunakan URL raw dari GitHub. */
+      background: url("https://github.com/af133/happy_birthday/blob/main/asset/Andre%20Firmansyah%20(13).png") no-repeat center bottom;
+      background-size: cover;
       transition: filter 1s;
       z-index: 1;
     }
@@ -93,17 +94,9 @@
     .dark-mode .tree {
       filter: none;
     }
-    /* Kelas untuk efek glowing pada pohon (ditambahkan saat fireworks muncul) */
-    .glowing-tree {
-      animation: treeGlow 2s infinite alternate;
-    }
-    @keyframes treeGlow {
-      from {
-        filter: brightness(1.2) saturate(1.5) drop-shadow(0 0 10px rgba(255,255,255,0.5));
-      }
-      to {
-        filter: brightness(1.5) saturate(1.8) drop-shadow(0 0 25px rgba(255,255,255,1));
-      }
+    /* Kelas untuk efek sementara pada pohon setelah fireworks muncul */
+    .temp-tree-effect {
+      filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
     }
     /* Pesan */
     .message-container {
@@ -123,6 +116,7 @@
     .dark-mode .message-container {
       color: #F0F0F0;
     }
+    /* Happy Birthday */
     .happy-birthday {
       display: inline-block;
       animation: popIn 1s ease-out;
@@ -312,6 +306,7 @@
   </div>
   <!-- Container Pohon -->
   <div class="tree-container">
+    <!-- Ganti tag <img> sesuai permintaan -->
     <img src="asset/Andre Firmansyah (13).png" class="tree" alt="Pohon Romantis" />
   </div>
   <!-- Container Interaksi -->
@@ -426,7 +421,7 @@
       }, 1000);
     }
     
-    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek glowing pada pohon (setelah fireworks muncul)
+    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek glowing pada pohon setelah fireworks muncul (pada dark mode)
     function triggerEffects() {
       const flash = document.getElementById("flash");
       flash.classList.add("flash-active");
@@ -439,7 +434,7 @@
         document.getElementById("aurora").style.opacity = 1;
         const toggleButton = document.getElementById("toggleMode");
         toggleButton.classList.add("glowing");
-        // Tambahkan kelas glowing-tree agar pohon mulai bersinar dan tetap bersinar
+        // Tambahkan kelas glowing-tree agar pohon mulai bersinar terus menerus
         const treeElement = document.querySelector(".tree");
         treeElement.classList.add("glowing-tree");
       }
@@ -531,7 +526,7 @@
               messageElement.innerText = extraMessages[extraIndex];
               messageElement.style.opacity = 1;
               extraIndex++;
-              // Tampilkan tombol interaktif untuk "Sempet" / "GAK SEMPET"
+              // Tampilkan tombol interaktif
               showWishButtons();
             }, 1000);
           } else {
@@ -564,13 +559,13 @@
     
       document.getElementById("btnMauuu").addEventListener("click", function() {
         container.remove();
-        // Langsung tampilkan satu falling star sebelum melanjutkan
+        // Tampilkan satu falling star segera
         generateFallingStar();
         displayFinalMessagesAndStartDramaticStars();
       });
       document.getElementById("btnMauJuga").addEventListener("click", function() {
         container.remove();
-        // Langsung tampilkan satu falling star sebelum melanjutkan
+        // Tampilkan satu falling star segera
         generateFallingStar();
         displayFinalMessagesAndStartDramaticStars();
       });
