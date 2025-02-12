@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pohon Romantis dengan Dark Mode</title>
   <style>
-    /* Reset dan Base */
+    /* Reset & Base */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -14,8 +14,6 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.4;
-      /* Menggunakan clamp untuk fluid typography */
-      font-size: clamp(1rem, 2vw, 1.5rem);
       margin: 0;
       min-height: 100vh;
       display: flex;
@@ -64,7 +62,7 @@
       background: radial-gradient(circle, #ffdd57 50%, #ff9900 90%);
       cursor: pointer;
       transition: all 0.5s;
-      z-index: 2;
+      z-index: 3;
       box-shadow: 0 0 20px rgba(255,215,0,0.8);
     }
     .dark-mode #toggleMode {
@@ -92,15 +90,15 @@
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;  /* Memastikan gambar mengisi container tanpa ruang kosong */
+      object-fit: cover; /* Mengisi container tanpa ruang kosong */
       transition: filter 1s;
       z-index: 1;
     }
-    /* Di dark mode, pohon tampil normal (tanpa filter tambahan) */
+    /* Di dark mode, pohon tampil normal (tanpa filter) */
     .dark-mode .tree {
       filter: none;
     }
-    /* Kelas efek sementara pada pohon (ditambahkan saat fireworks muncul) */
+    /* Kelas untuk efek sementara pada pohon (ditambahkan saat fireworks muncul) */
     .temp-tree-effect {
       filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
     }
@@ -109,15 +107,16 @@
       position: absolute;
       top: 10%;
       width: 80%;
+      margin: 0 auto;
       text-align: center;
-      font-size: clamp(1rem, 2vw, 1.5rem);
+      /* Menggunakan clamp() untuk fluid typography */
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       font-weight: bold;
       color: #003366;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
       opacity: 0;
       transition: opacity 1s ease-in-out;
-      z-index: 2;
-      margin: 0 auto;
+      z-index: 3;
     }
     .dark-mode .message-container {
       color: #F0F0F0;
@@ -126,7 +125,7 @@
     .happy-birthday {
       display: inline-block;
       animation: popIn 1s ease-out;
-      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
       color: #ffcc00;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -157,7 +156,7 @@
       width: 100%;
       height: 100%;
       background: white;
-      z-index: 4;
+      z-index: 5;
       opacity: 0;
       pointer-events: none;
     }
@@ -177,7 +176,7 @@
       height: 100%;
       pointer-events: none;
       overflow: visible;
-      z-index: 3;
+      z-index: 4;
     }
     .firework {
       position: absolute;
@@ -232,10 +231,12 @@
     /* Container Interaksi */
     #interaction {
       position: absolute;
-      bottom: 20px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 100%;
       text-align: center;
-      z-index: 2;
+      z-index: 6; /* Pastikan tombol tampil di atas pohon */
     }
     /* Tombol Interaktif */
     #interaction button {
@@ -243,12 +244,12 @@
       border: 2px solid #ff9900;
       border-radius: 12px;
       padding: 12px 24px;
-      font-size: 1.25rem;
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
       color: #003366;
       cursor: pointer;
       transition: all 0.3s ease;
       margin: 8px;
-      z-index: 2;
+      z-index: 7;
       position: relative;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
@@ -260,7 +261,7 @@
     /* Media Queries Responsif */
     @media (max-width: 768px) {
       .message-container {
-        font-size: 1.25rem;
+        font-size: clamp(1rem, 3vw, 1.75rem);
         width: 90%;
       }
       #toggleMode {
@@ -270,13 +271,13 @@
         left: 15px;
       }
       #interaction button {
-        font-size: 1rem;
+        font-size: clamp(0.9rem, 3vw, 1.2rem);
         padding: 10px 20px;
       }
     }
     @media (max-width: 480px) {
       .message-container {
-        font-size: 1rem;
+        font-size: clamp(0.9rem, 4vw, 1.25rem);
         width: 95%;
         top: 8%;
       }
@@ -287,7 +288,7 @@
         left: 10px;
       }
       #interaction button {
-        font-size: 0.9rem;
+        font-size: clamp(0.8rem, 4vw, 1rem);
         padding: 8px 16px;
       }
     }
@@ -312,7 +313,7 @@
   </div>
   <!-- Container Pohon -->
   <div class="tree-container">
-    <!-- Menggunakan tag <img> untuk gambar pohon -->
+    <!-- Menggunakan tag <img> untuk gambar pohon lokal -->
     <img src="asset/Andre Firmansyah (18).png" class="tree" alt="Pohon Romantis" />
   </div>
   <!-- Container Interaksi -->
@@ -559,7 +560,7 @@
       container.id = "finalButtons";
       container.style.textAlign = "center";
       container.style.marginTop = "20px";
-      container.style.zIndex = "2";
+      container.style.zIndex = "7";
       container.innerHTML = `<button id="btnMauuu">Mauuu</button> <button id="btnMauJuga">Mau juga</button>`;
       document.getElementById("interaction").appendChild(container);
     
