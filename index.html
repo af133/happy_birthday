@@ -115,12 +115,14 @@
       position: relative;
       overflow: hidden;
     }
-    /* Gambar Pohon – Menggunakan tag <img> agar responsif */
+    /* Gambar Pohon – Menggunakan tag <img> agar responsif dan sesuai ukuran aslinya */
     .tree {
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Gambar mengisi container tanpa ruang kosong */
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
       transition: filter 1s;
       z-index: 1;
     }
@@ -353,13 +355,13 @@
   <!-- Container Interaksi -->
   <div id="interaction"></div>
   <!-- Audio Background (Musik otomatis, tersembunyi, mulai dalam keadaan mute) -->
-  <audio id="bgMusic" src="https://github.com/af133/happy_birthday/blob/f3850a64c1425eaff2667e70bdac4826064f5fb8/asset/Sal%20Priadi%20-%20I'd%20Like%20To%20Watch%20You%20Sleeping%20(Lirik%20Lagu)%20Kau%20adalah%20orang%20favoritku%20nomor%201.mp3" autoplay loop hidden muted></audio>
+  <!-- Ganti URL audio dengan URL raw dari GitHub -->
+  <audio id="bgMusic" src="https://raw.githubusercontent.com/af133/happy_birthday/f3850a64c1425eaff2667e70bdac4826064f5fb8/asset/Sal%20Priadi%20-%20I%27d%20Like%20To%20Watch%20You%20Sleeping%20(Lirik%20Lagu)%20Kau%20adalah%20orang%20favoritku%20nomor%201.mp3" autoplay loop hidden muted></audio>
   <script>
-    // Mulai: tangani overlay awal
+    // Tangani overlay awal
     document.getElementById("startButton").addEventListener("click", function() {
-      // Unmute audio dan sembunyikan overlay
       const bgMusic = document.getElementById("bgMusic");
-      bgMusic.muted = false;
+      bgMusic.muted = false; // Unmute audio
       document.getElementById("startOverlay").classList.add("hidden");
     });
     
@@ -708,6 +710,7 @@
     }
   </script>
   <!-- Audio Background (Musik otomatis, tersembunyi, mulai dalam keadaan mute) -->
-  <audio id="bgMusic" src="https://github.com/af133/happy_birthday/blob/f3850a64c1425eaff2667e70bdac4826064f5fb8/asset/Sal%20Priadi%20-%20I'd%20Like%20To%20Watch%20You%20Sleeping%20(Lirik%20Lagu)%20Kau%20adalah%20orang%20favoritku%20nomor%201.mp3" autoplay loop hidden muted></audio>
+  <!-- Menggunakan URL raw dari GitHub agar file audio dapat diakses langsung -->
+  <audio id="bgMusic" src="https://raw.githubusercontent.com/af133/happy_birthday/f3850a64c1425eaff2667e70bdac4826064f5fb8/asset/Sal%20Priadi%20-%20I%27d%20Like%20To%20Watch%20You%20Sleeping%20(Lirik%20Lagu)%20Kau%20adalah%20orang%20favoritku%20nomor%201.mp3" autoplay loop hidden muted></audio>
 </body>
 </html>
