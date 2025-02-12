@@ -400,12 +400,12 @@
     // Pesan tambahan (extra messages)
     const extraMessages = [
       "Happy Birthday untukmu! 🎂🎉",
-      "sorry aku salah waktu ngucapin kemarin! 🙏",
-      "maaf juga kalau gak bagus ya karenan ini sks hahaha! 😅",
-      "ini aku kasih bintangnya 500 bintang aja ya... 🌟",
+      "Sorry aku salah waktu ngucapin kemarin! 🙏",
+      "Maaf juga kalau gak bagus ya karenan ini sks hahaha! 😅",
+      "Ini aku kasih bintangnya 500 bintang aja ya... 🌟",
       "dan untuk wish nya, buat aja sendiri, wleee",
-      "tuh aku kasih bintang jatuh satu",
-      "udah sempat wish belom?"
+      "Tuh aku kasih bintang jatuh satu",
+      "Udah sempat minta sesuatu belom?"
     ];
     
     // Fungsi untuk menampilkan pesan utama satu per satu
@@ -623,8 +623,12 @@
     function displayAdditionalMessages() {
       let additionalIndex = 0;
       const additionalMessages = [
-        "Sapa siuruh lamaaaa...",
-        "kecepeten ya? wwkwkw",
+        "Sapa suruh lamaaaa...",
+        "Mangkannya cepett kekk",
+        "Kenapa mau berantem? wwkwkw",
+        "Ayok wkwkwkwkww",
+        "Gakkk bercandaaa",
+        "Kecepeten ya??".
         "Mau aku kasih bintang jatuh lagi gak??"
       ];
       function nextAdditionalMessage() {
@@ -672,26 +676,31 @@
       const finalMessages = [
         "Okee aku kasih deh bintang banyakk",
         "Biar gak dikatain pelit HAHAHA",
+        "Sanaa cepet wish yang banyakkk",
+        "Oh ya sayang",
         "+1 lagi",
-        "aku mau bilang",
+        "aku mau ngomong",
         "today is the oldest you have been, and become the bravest version of you so far",
         "and i am glad i could take part ur story part or even chapters",
         "and with these 500 stars..",
-        "i wish you",
-        "and here are the firelies"
+        "i wish you"
       ];
       let finalIndex = 0;
       function showNextFinalMessage() {
         if (finalIndex < finalMessages.length) {
+          if (finalIndex==1){
+          startDramaticFallingStars();
+          }
           messageElement.style.opacity = 0;
           setTimeout(() => {
             messageElement.innerText = finalMessages[finalIndex];
             messageElement.style.opacity = 1;
             finalIndex++;
             setTimeout(showNextFinalMessage, 4000);
+            startDramaticFallingStars();
           }, 1000);
         } else {
-          messageElement.innerText = "Enjoy the falling stars!";
+          messageElement.innerText ="and here are the firelies";
           startDramaticFallingStars();
         }
       }
@@ -701,7 +710,7 @@
     // Fungsi untuk mulai menghasilkan falling stars secara dramatis (5 falling stars sekaligus, posisi acak)
     function startDramaticFallingStars() {
       setInterval(() => {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 8; i++) {
           generateFallingStar();
         }
       }, 1000);
