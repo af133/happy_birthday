@@ -90,18 +90,26 @@
       width: 100%;
       height: auto;
       max-height: 80vh;
-      https://raw.githubusercontent.com/af133/happy_birthday/branch-name/asset/Andre%20Firmansyah%20(13).png
+      background: url("asset/Andre Firmansyah (13).png") no-repeat center bottom;
       background-size: contain;
       transition: filter 1s;
       z-index: 1;
     }
-    /* Pada dark mode, pohon tampil tanpa filter tambahan (normal) */
+    /* Pada dark mode, pohon tampil normal (tanpa filter tambahan) */
     .dark-mode .tree {
       filter: none;
     }
-    /* Kelas untuk efek sementara pada pohon saat fireworks muncul */
-    .temp-tree-effect {
-      filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
+    /* Kelas untuk efek sementara pada pohon setelah fireworks muncul (akan diterapkan saat triggerEffects dipanggil) */
+    .glowing-tree {
+      animation: treeGlow 2s infinite alternate;
+    }
+    @keyframes treeGlow {
+      from {
+        filter: brightness(1.2) saturate(1.5) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+      }
+      to {
+        filter: brightness(1.5) saturate(1.8) drop-shadow(0 0 25px rgba(255,255,255,1));
+      }
     }
     /* Pesan */
     .message-container {
@@ -297,7 +305,7 @@
   </div>
   <!-- Container Pohon -->
   <div class="tree-container">
-    <img src="C:/Projek Pribadi/Website/Portofolio_Andre%20Firmansyah/asset/Andre%20Firmansyah%20(12).png" class="tree" alt="Pohon Romantis" />
+    <img src="asset/Andre Firmansyah (13).png" class="tree" alt="Pohon Romantis" />
   </div>
   <!-- Container Interaksi -->
   <div id="interaction"></div>
@@ -385,7 +393,7 @@
         document.getElementById("interaction").innerHTML = "";
         document.getElementById("toggleMode").classList.remove("glowing");
         const treeElement = document.querySelector(".tree");
-        treeElement.classList.remove("temp-tree-effect");
+        treeElement.classList.remove("glowing-tree");
       }
       index = 0;
       clearInterval(messageInterval);
@@ -411,7 +419,7 @@
       }, 1000);
     }
     
-    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek pada pohon setelah fireworks muncul (pada dark mode)
+    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek glowing pada pohon (setelah fireworks muncul)
     function triggerEffects() {
       const flash = document.getElementById("flash");
       flash.classList.add("flash-active");
@@ -425,13 +433,9 @@
         // Tambahkan kelas glowing pada tombol toggle (bulan)
         const toggleButton = document.getElementById("toggleMode");
         toggleButton.classList.add("glowing");
-        // Setelah fireworks muncul, tambahkan efek filter pada pohon secara sementara
+        // Tambahkan kelas glowing-tree agar pohon mulai bersinar dan tetap bersinar
         const treeElement = document.querySelector(".tree");
-        treeElement.classList.add("temp-tree-effect");
-        // Hapus efek tersebut setelah 3000ms agar pohon kembali tampil normal
-        setTimeout(() => {
-          treeElement.classList.remove("temp-tree-effect");
-        }, 3000);
+        treeElement.classList.add("glowing-tree");
       }
       
       const fireworksContainer = document.getElementById("fireworks");
@@ -453,11 +457,19 @@
       }, 3000);
     }
     
-    // Tambahkan CSS untuk kelas "temp-tree-effect" (efek sementara pada pohon saat fireworks muncul)
+    // Tambahkan CSS untuk kelas "glowing-tree"
     const styleEl = document.createElement('style');
     styleEl.innerHTML = `
-      .temp-tree-effect {
-        filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
+      .glowing-tree {
+        animation: treeGlow 2s infinite alternate;
+      }
+      @keyframes treeGlow {
+        from {
+          filter: brightness(1.2) saturate(1.5) drop-shadow(0 0 10px rgba(255,255,255,0.5));
+        }
+        to {
+          filter: brightness(1.5) saturate(1.8) drop-shadow(0 0 25px rgba(255,255,255,1));
+        }
       }
     `;
     document.head.appendChild(styleEl);
@@ -480,11 +492,10 @@
       }
     }
     
-    // Fungsi untuk membuat 1 falling star (bintang jatuh) yang lebih besar dan dengan posisi random
+    // Fungsi untuk membuat 1 falling star (bintang jatuh) dengan posisi random
     function generateFallingStar() {
       const fallingStar = document.createElement("div");
       fallingStar.className = "shooting-star";
-      // Tentukan posisi horizontal dan vertikal secara acak agar efek falling star lebih dinamis
       fallingStar.style.left = Math.random() * 100 + "vw";
       fallingStar.style.top = Math.random() * 100 + "vh";
       document.getElementById("stars").appendChild(fallingStar);
@@ -592,10 +603,14 @@
     
       document.getElementById("btnMauuu").addEventListener("click", function() {
         container.remove();
+        // Langsung tampilkan satu falling star sebelum melanjutkan
+        generateFallingStar();
         displayFinalMessagesAndStartDramaticStars();
       });
       document.getElementById("btnMauJuga").addEventListener("click", function() {
         container.remove();
+        // Langsung tampilkan satu falling star sebelum melanjutkan
+        generateFallingStar();
         displayFinalMessagesAndStartDramaticStars();
       });
     }
