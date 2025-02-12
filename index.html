@@ -5,19 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pohon Romantis dengan Dark Mode</title>
   <style>
-    /* Style Utama */
+    /* Reset dan Base */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.4;
+      /* Menggunakan clamp untuk fluid typography */
+      font-size: clamp(1rem, 2vw, 1.5rem);
       margin: 0;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       background: linear-gradient(to top, #a8e6ff, #ffffff);
       transition: background 1s ease-in-out;
       position: relative;
       overflow: hidden;
-      flex-direction: column;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     /* Dark Mode */
     .dark-mode {
@@ -32,8 +40,8 @@
       height: 100%;
       background-color: white;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       font-size: 2rem;
       font-weight: bold;
       color: #003366;
@@ -75,26 +83,24 @@
     /* Container Pohon */
     .tree-container {
       width: 100%;
-      height: 100vh;
+      height: 100vh; /* Mengisi seluruh tinggi viewport */
       position: relative;
       overflow: hidden;
     }
-    /* Gunakan tag <img> untuk pohon dengan src lokal */
+    /* Gambar Pohon – menggunakan tag <img> */
     .tree {
+      display: block;
       width: 100%;
       height: 100%;
-      /* Menggunakan URL background sesuai permintaan.
-         Jika gambar tidak muncul, pertimbangkan untuk menggunakan URL raw dari GitHub. */
-      background: url("https://github.com/af133/happy_birthday/blob/main/asset/Andre%20Firmansyah%20(13).png") no-repeat center bottom;
-      background-size: cover;
+      object-fit: cover;  /* Memastikan gambar mengisi container tanpa ruang kosong */
       transition: filter 1s;
       z-index: 1;
     }
-    /* Di dark mode, pohon tampil normal (tanpa filter) */
+    /* Di dark mode, pohon tampil normal (tanpa filter tambahan) */
     .dark-mode .tree {
       filter: none;
     }
-    /* Kelas untuk efek sementara pada pohon setelah fireworks muncul */
+    /* Kelas efek sementara pada pohon (ditambahkan saat fireworks muncul) */
     .temp-tree-effect {
       filter: brightness(1.4) saturate(1.8) drop-shadow(0 0 30px rgba(255,255,255,1));
     }
@@ -103,15 +109,15 @@
       position: absolute;
       top: 10%;
       width: 80%;
-      margin: 0 auto;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: clamp(1rem, 2vw, 1.5rem);
       font-weight: bold;
       color: #003366;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
       opacity: 0;
       transition: opacity 1s ease-in-out;
       z-index: 2;
+      margin: 0 auto;
     }
     .dark-mode .message-container {
       color: #F0F0F0;
@@ -120,7 +126,7 @@
     .happy-birthday {
       display: inline-block;
       animation: popIn 1s ease-out;
-      font-size: 2rem;
+      font-size: clamp(1.5rem, 3vw, 2rem);
       color: #ffcc00;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     }
@@ -306,7 +312,7 @@
   </div>
   <!-- Container Pohon -->
   <div class="tree-container">
-    <!-- Ganti tag <img> sesuai permintaan -->
+    <!-- Menggunakan tag <img> untuk gambar pohon -->
     <img src="asset/Andre Firmansyah (13).png" class="tree" alt="Pohon Romantis" />
   </div>
   <!-- Container Interaksi -->
@@ -421,7 +427,7 @@
       }, 1000);
     }
     
-    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek glowing pada pohon setelah fireworks muncul (pada dark mode)
+    // Trigger efek: flash, kembang api, bintang, aurora, dan tambahkan efek glowing pada pohon (setelah fireworks muncul)
     function triggerEffects() {
       const flash = document.getElementById("flash");
       flash.classList.add("flash-active");
@@ -571,7 +577,7 @@
       });
     }
     
-    // Tampilkan rangkaian pesan final dan mulai falling stars secara dramatis
+    // Tampilkan rangkaian pesan final dan mulai efek falling stars secara dramatis
     function displayFinalMessagesAndStartDramaticStars() {
       const finalMessages = [
         "Okee aku kasih deh bintang banyakk",
